@@ -6,6 +6,8 @@
 package edu.eci.arsw.blacklistvalidator;
 
 import edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,30 +35,38 @@ public class HostBlackListsValidator extends Thread {
 	public List<Integer> checkHost(String ipaddress, int n) {
 
 		LinkedList<Integer> blackListOcurrences = new LinkedList<>();
+		LinkedList<Threads> hilos = new LinkedList<Threads>();
 
 		int ocurrencesCount = 0;
 		int nSection = 1;
 
 		HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
-		
-		int listPerThread = skds.getRegisteredServersCount()/n;
+
+		int listPerThread = skds.getRegisteredServersCount() / n;
 		boolean flag = false;
-		int m = skds.getRegisteredServersCount() - (listPerThread*n);
-		
-		
+		int m = skds.getRegisteredServersCount() - (listPerThread * n);
+
+		// Fragmento de codigo hecho por Javier Vargas y Sebastian Goenaga
+
 		if (m != 0) {
 			flag = true;
 		}
 
-		int checkedListsCount = 0;
+		for (int i = 0; i < n; i++) {
+			hilos.add(new Threads(i * listPerThread, i + 1 * listPerThread, ipaddress, skds));
+		}
+		if (flag) {
+			hilos.add(new Threads(listPerThread*n, listPerThread*n+m, ipaddress, skds));
+		}
 
-		for (int i = 0; i < ((flag)?n+1 : n) && Threads.flag; i++) {
-			checkedListsCount++;
-			
-			if
+		for (int i = 0; i < ((flag) ? n + 1 : n) && Threads.flag; i++) {
+
+			if (flag) { // Resolver el la cantidad de listas sobrante
+
+			}
 
 			if (skds.isInBlackListServer(i, ipaddress)) {
-				
+
 				blackListOcurrences.add(i);
 
 				ocurrencesCount++;
@@ -70,16 +80,16 @@ public class HostBlackListsValidator extends Thread {
 		}
 
 		LOG.log(Level.INFO, "Checked Black Lists:{0} of {1}",
-				new Object[] { checkedListsCount, skds.getRegisteredServersCount() });
+				new Object[] { Threads.checkedListsCount, skds.getRegisteredServersCount() });
 
 		return blackListOcurrences;
 	}
-	
+
 	@Override
 	public void run() {
-		
+
 	}
-	
+
 	private static final Logger LOG = Logger.getLogger(HostBlackListsValidator.class.getName());
 
 }

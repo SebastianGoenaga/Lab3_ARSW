@@ -10,6 +10,8 @@ public class Threads extends Thread {
 	
 	private static final int BLACK_LIST_ALARM_COUNT = 5;
 	private static int count = 0;
+	public static int checkedListsCount = 0;
+	
 	public static boolean flag = true;
 	
 	
