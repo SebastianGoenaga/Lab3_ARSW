@@ -1,7 +1,5 @@
 package edu.eci.arsw.blacklistvalidator;
 
-import java.awt.List;
-import java.net.URL;
 import java.util.LinkedList;
 
 import edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade;
@@ -33,6 +31,7 @@ public class Threads extends Thread {
 	@Override
 	public void run() {
 		for (int i = n1; i < n2 && count < BLACK_LIST_ALARM_COUNT; i++) {
+			checkedListsCount++;
 			personal++;
 			if (skds.isInBlackListServer(i, ipaddress)) {
 				count++;
@@ -44,7 +43,7 @@ public class Threads extends Thread {
 //			System.out.println("Hola");
 			flag = false;
 		}
-//		System.out.println(n1 +", "+ n2);
+//		System.out.println(personal);
 	}
 	
 	public LinkedList<Integer> ask (){

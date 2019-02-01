@@ -66,9 +66,12 @@ public class HostBlackListsValidator {
 			hilo.start();
 //			hilos.add(new Threads(listPerThread*n, listPerThread*n+m, ipaddress, skds));
 		}
-
+		
+		int i = 0;
+		
 		while (Threads.flag) {
-//			System.out.println(flag);
+			i++;
+			System.out.println(i);
 		}
 
 //		for (int i = 0; i < ((flag) ? n + 1 : n) && Threads.flag; i++) {
