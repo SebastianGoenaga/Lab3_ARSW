@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class Main {
     
-    public static void main(String a[]){
-        float i = (float) 0.0;
-        System.out.println(i == (int) 0);
-        		
+	public static void main(String a[]){
+        HostBlackListsValidator hblv=new HostBlackListsValidator();
+        List<Integer> blackListOcurrences=hblv.checkHost("200.24.34.55", 5);
+        System.out.println("The host was found in the following blacklists:"+blackListOcurrences);
         
     }
     

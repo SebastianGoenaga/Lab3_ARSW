@@ -13,11 +13,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.xml.ws.Holder;
+
 /**
  *
  * @author hcadavid
  */
-public class HostBlackListsValidator extends Thread {
+public class HostBlackListsValidator {
 
 	private static final int BLACK_LIST_ALARM_COUNT = 5;
 
@@ -43,8 +45,8 @@ public class HostBlackListsValidator extends Thread {
 		HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
 
 		int listPerThread = skds.getRegisteredServersCount() / n;
-		boolean flag = false;
 		int m = skds.getRegisteredServersCount() - (listPerThread * n);
+		boolean flag = (m != 0) ? true : false;
 
 		// Fragmento de codigo hecho por Javier Vargas y Sebastian Goenaga
 
@@ -52,28 +54,38 @@ public class HostBlackListsValidator extends Thread {
 			flag = true;
 		}
 
+		Threads hilo;
+
 		for (int i = 0; i < n; i++) {
-			hilos.add(new Threads(i * listPerThread, i + 1 * listPerThread, ipaddress, skds));
+			hilo = new Threads(i * listPerThread, (i + 1) * listPerThread, ipaddress, skds);
+			hilo.start();
+//			hilos.add(new Threads(i * listPerThread, i + 1 * listPerThread, ipaddress, skds));
 		}
 		if (flag) {
-			hilos.add(new Threads(listPerThread*n, listPerThread*n+m, ipaddress, skds));
+			hilo = new Threads(listPerThread * n, listPerThread * n + m, ipaddress, skds);
+			hilo.start();
+//			hilos.add(new Threads(listPerThread*n, listPerThread*n+m, ipaddress, skds));
 		}
 
-		for (int i = 0; i < ((flag) ? n + 1 : n) && Threads.flag; i++) {
-
-			if (flag) { // Resolver el la cantidad de listas sobrante
-
-			}
-
-			if (skds.isInBlackListServer(i, ipaddress)) {
-
-				blackListOcurrences.add(i);
-
-				ocurrencesCount++;
-			}
+		while (Threads.flag) {
+//			System.out.println(flag);
 		}
 
-		if (ocurrencesCount >= BLACK_LIST_ALARM_COUNT) {
+//		for (int i = 0; i < ((flag) ? n + 1 : n) && Threads.flag; i++) {
+//
+//			if (flag) { // Resolver el la cantidad de listas sobrante
+//				
+//			}
+//
+//			if (skds.isInBlackListServer(i, ipaddress)) {
+//				
+//				blackListOcurrences.add(i);
+//				
+//				ocurrencesCount++;
+//			}
+//		}
+
+		if (Threads.count >= BLACK_LIST_ALARM_COUNT) {
 			skds.reportAsNotTrustworthy(ipaddress);
 		} else {
 			skds.reportAsTrustworthy(ipaddress);
@@ -82,12 +94,7 @@ public class HostBlackListsValidator extends Thread {
 		LOG.log(Level.INFO, "Checked Black Lists:{0} of {1}",
 				new Object[] { Threads.checkedListsCount, skds.getRegisteredServersCount() });
 
-		return blackListOcurrences;
-	}
-
-	@Override
-	public void run() {
-
+		return Threads.blackListOcurrences;
 	}
 
 	private static final Logger LOG = Logger.getLogger(HostBlackListsValidator.class.getName());
