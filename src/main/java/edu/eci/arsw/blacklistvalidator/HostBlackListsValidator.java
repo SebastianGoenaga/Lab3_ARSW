@@ -54,25 +54,40 @@ public class HostBlackListsValidator {
 			flag = true;
 		}
 
-		Threads hilo;
+		Threads hilo = null;
 
 		for (int i = 0; i < n; i++) {
 			hilo = new Threads(i * listPerThread, (i + 1) * listPerThread, ipaddress, skds);
 			hilo.start();
 //			hilos.add(new Threads(i * listPerThread, i + 1 * listPerThread, ipaddress, skds));
 		}
+		
+		try {
+			hilo.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		if (flag) {
 			hilo = new Threads(listPerThread * n, listPerThread * n + m, ipaddress, skds);
 			hilo.start();
 //			hilos.add(new Threads(listPerThread*n, listPerThread*n+m, ipaddress, skds));
 		}
 		
-		int i = 0;
-		
-		while (Threads.flag) {
-			i++;
-			System.out.println(i);
+		try {
+			hilo.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+//		int i = 0;
+//		
+//		while (Threads.flag) {
+//			i++;
+//			System.out.println(i);
+//		}
 
 //		for (int i = 0; i < ((flag) ? n + 1 : n) && Threads.flag; i++) {
 //
