@@ -17,7 +17,7 @@ public class Threads extends Thread {
 	private Integer n2;
 	private String ipaddress;
 	private HostBlacklistsDataSourceFacade skds;
-	private int personal;
+	private int personal; // Contador de cuantas iteraciones hace cada hilo
 
 	public Threads(int n1, int n2, String ipaddress, HostBlacklistsDataSourceFacade skds) {
 		this.n1 = n1;
@@ -25,16 +25,19 @@ public class Threads extends Thread {
 		this.ipaddress = ipaddress;
 		this.skds = skds;
 	}
+	
+	public static void resetStatics() {
+		count = 0;
+		checkedListsCount = 0;
+		blackListOcurrences = new LinkedList<>();
+	}
 
 	@Override
 	public void run() {
-//		System.out.println(n1+" "+n2);
 		personal = 0;
 		for (int i = n1; i < n2 && Threads.count < Threads.BLACK_LIST_ALARM_COUNT; i++) {
 			personal++;
-			synchronized (checkedListsCount) {
-				checkedListsCount++;
-			}
+			
 			if (skds.isInBlackListServer(i, ipaddress)) {
 				synchronized (count) {
 					count++;
@@ -42,21 +45,13 @@ public class Threads extends Thread {
 				synchronized (blackListOcurrences) {
 					blackListOcurrences.add(i);
 				}
-
 			}
 		}
-//		System.out.println(count);
 		if (count >= BLACK_LIST_ALARM_COUNT) {
-//			System.out.println("Hola");
 			flag = false;
 		}
-		System.out.println(personal);
+		synchronized (Threads.checkedListsCount) {
+			Threads.checkedListsCount += this.personal;
+		}
 	}
-
-	public LinkedList<Integer> ask() {
-
-		return null;
-
-	}
-
 }
