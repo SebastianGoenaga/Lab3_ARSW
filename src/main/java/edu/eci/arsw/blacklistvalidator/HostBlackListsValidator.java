@@ -69,6 +69,7 @@ public class HostBlackListsValidator {
 		LOG.log(Level.INFO, "Checked Black Lists:{0} of {1}",
 				new Object[] { Threads.checkedListsCount, skds.getRegisteredServersCount() });
 		
+		Collections.sort(Threads.blackListOcurrences);
 		return Threads.blackListOcurrences;
 	}
 

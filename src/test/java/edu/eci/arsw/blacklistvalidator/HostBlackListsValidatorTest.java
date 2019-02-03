@@ -53,7 +53,7 @@ public class HostBlackListsValidatorTest {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
+			Collections.sort(Threads.blackListOcurrences);
 			String expected = Threads.blackListOcurrences.toString();
 			Threads.resetStatics(); // Reinicia las variables estaticas de la clase Threads
 			HostBlackListsValidator validator = new HostBlackListsValidator();
