@@ -11,4 +11,4 @@ And start method a diorganized result:
 ![foto1](img/img2.png)
 
 
-That´s because the `start()` creat new thread for each call and `run()`
+That´s because the `start()` creat new thread for each call and `run()` doesn´t
