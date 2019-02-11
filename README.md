@@ -15,4 +15,6 @@ That´s because the `start()` creat new thread for each call and `run()` doesn´
 
 ## Part ll
 
+So many checked lists is because each thread is working on your own and only stops when found the limit of list that in this case is 5
+
 ![](img/img3.png)
