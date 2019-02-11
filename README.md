@@ -33,10 +33,10 @@ With single thread:
 
 With 4 threads:
 
-![](img/4hilo.png)
+![](img/4hilos.png)
 
 With 8 threads:
 
-![](img/8hilo.png)
+![](img/8hilos.png)
 
 In the above we can see that my program run so fast and can no detect CPU usage at all. That´s because I do not continue with more threads.
